@@ -1,0 +1,104 @@
+body {
+    .showload {
+        --lasttime: 0s;
+        @keyframes showload {
+            from {
+                opacity: 0;
+                transform: translate(0, 1rem);
+            }
+            to {
+                opacity: 1;
+                transform: translate(0, 0);
+            }
+        }
+        animation: showload .5s calc(var(--lasttime) + .5s) both;
+    }
+
+    .leftload {
+        overflow: hidden;
+        @keyframes leftload {
+            from {
+                opacity: 0;
+                margin-left: -100%;
+                margin-right: 100%;
+            }
+            to {
+                opacity: 1;
+                margin-left: unset;
+                margin-right: unset;
+            }
+        }
+
+        > * {
+            --lasttime: 0s;
+            animation: leftload .5s calc(var(--lasttime) + .5s) backwards;
+        }
+
+        > hr {
+            animation: leftload 1s calc(var(--lasttime) + .5s) backwards;
+        }
+    }
+
+    .lockwidth {
+        max-width: 45rem !important;
+        margin: auto !important;
+    }
+
+    > section {
+        padding: 1rem 2rem;
+        @media print, screen and (min-width: 40em) {
+            padding: 1rem 7rem;
+        }
+
+        hr {
+            border-color: rgba(214, 214, 214, 0.86);
+        }
+
+        > titl {
+            padding: 5rem 0 0;
+
+            * {
+                color: #696969;
+            }
+
+            #icon {
+                border: 3px solid #dddddd;
+                --size: 5rem;
+                height: var(--size);
+                width: var(--size);
+            }
+
+            small {
+                color: #999999;
+            }
+
+            hr {
+                border-width: 1px;
+            }
+        }
+
+        > section {
+            * {
+                color: #4c4c4c !important;
+            }
+
+            a {
+                color: #4086ed !important;
+            }
+
+            > blockquote {
+                --a: 42, 106, 180;
+                background-color: rgba(var(--a), 0.2);
+                border-left-color: rgb(var(--a));
+                border-width: 5px;
+            }
+        }
+
+        /*
+                > * {
+                    @media print, screen and (min-width: 64em) {
+                        height: 100vh !important;
+                    }
+                }*/
+    }
+}
