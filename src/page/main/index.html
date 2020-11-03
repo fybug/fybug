@@ -29,6 +29,8 @@
             <div class="margin-top-1"></div>
             <ul class="menu">
                 <li><u><a href="javascript:alert('建造中')">博客</a></u></li>
+                <li><u><a href="https://fybug.gitee.io/projectsby/main.html" target="_blank">开源 项目 /
+                    作品 列表</a></u></li>
                 <li><u><a href="https://space.bilibili.com/17853010"
                           target="_blank">BiliBili</a></u></li>
                 <li><u><a href="https://www.acfun.cn/u/33592597" target="_blank">AcFun</a></u>
@@ -37,8 +39,6 @@
                           target="_blank">简书</a></u></li>
                 <li><u><a href="https://me.csdn.net/weixin_43955685"
                           target="_blank">CSDN</a></u></li>
-                <li><u><a href="https://fybug.gitee.io/projectsby/main.html" target="_blank">作品集</a></u>
-                </li>
             </ul>
         </div>
         <!-- 欢迎语 -->
@@ -55,10 +55,11 @@
             </div>
         </div>
     </titl>
+
     <!-- 内容部分 -->
     <section class="lockwidth cell grid-y leftload align-top padding-top-1">
         <!-- git 地址 -->
-        <div class="cell" style="--lasttime: .4s">
+        <div class="cell" style="--lasttime:.4s">
             <div class="callout radius warning"><p><small>因为一些原因项目存放在两个不同的 git 账号中</small></p></div>
             <div class="taltitle">
                 <p><b>开源库存放地址</b></p>
@@ -88,31 +89,104 @@
             </div>
             <hr class="cell"/>
         </div>
-        <!-- 内容 -->
+
+        <!-- 个人信息 -->
         <p class="taltitle" style="--lasttime: .6s"><b>个人信息</b></p>
-        <blockquote class="cell grid-x radius" style="--a:21,174,33;--lasttime: .8s">
+        <blockquote class="cell grid-x radius"
+                    style="--a:21,174,33;--lasttime: .8s">
+            <div class="cell shrink show-for-medium-only padding-left-1"></div>
+            <div class="cell auto" id="gerenxinxi">
+                <p>[暂时没写]</p>
+            </div>
+        </blockquote>
+
+        <!-- 个人梗概 -->
+        <p class="taltitle" style="--lasttime: 1s"><b>个人梗概</b></p>
+        <blockquote class="cell grid-x margin-bottom-0 radius"
+                    style="--a:21, 131, 174;--lasttime: 1.2s">
             <div class="cell shrink show-for-medium-only padding-left-1"></div>
             <div class="cell auto">
                 <ul>
-                    <li><p>邮箱：[当前保密]</p></li>
-                    <li><p>城市：[当前保密]</p></li>
+                    <li><p id="gerengengai">毕业于 [数据删除]，有着坚实的计算机基础知识以及开发经验。</p></li>
+                    <li><p>自研爱好者，擅长将解决遇到过的问题转化为针对性的轻量级库 / 框架。开发过针对 webpack 的手脚架以及 java
+                        的各种库，详情请见个人主页的作品集。</p></li>
+                    <li><p>热衷于创新，爱好于学习，既擅长团队合作，又有自己的见解能够独立完成任务。</p></li>
+                    <li><p>能使用 SpringBoot 开发 java 后台程序，能妥善处理一般的需求。可使用自制的 webpack
+                        手脚架搭建前端部分的雏形，并可低成本的拼接上 vue, react 等前端框架</p></li>
                 </ul>
             </div>
         </blockquote>
-        <p class="taltitle" style="--lasttime: 1s"><b>当前开源项目类型有</b></p>
-        <blockquote class="cell margin-bottom-0 grid-x radius" style="--lasttime: 1.2s">
+        <hr class="cell" style="--lasttime: 1.2s"/>
+
+        <!-- 教育背景 -->
+        <p class="taltitle" style="--lasttime:1.4s"><b>教育背景</b></p>
+        <div class="cell grid-x margin-bottom-0 radius" style="--lasttime: 1.6s">
+            <div class="cell shrink hide-for-small-only padding-left-1"></div>
+            <div class="cell auto" id="jiaoyubeijin">
+                <p>[暂时没写]</p>
+            </div>
+        </div>
+        <hr class="cell" style="--lasttime: 1.6s"/>
+
+        <!-- 专业技能 -->
+        <h4 class="taltitle" style="--lasttime:1.8s">专业技能</h4>
+        <div class="cell margin-bottom-0" style="--lasttime: 2s">
+            <div class="margin-left-1">
+                <h5>编程语言</h5>
+                <ul class="margin-left-2">
+                    <li>JavaScript</li>
+                    <li>HTML5 + CSS3</li>
+                    <li>Java</li>
+                    <li>Php</li>
+                </ul>
+            </div>
+            <div class="margin-left-1">
+                <h5>框架/库</h5>
+                <div class="margin-left-1">
+                    <div>
+                        <h6>后台</h6>
+                        <ul class="margin-left-2">
+                            <li>SpringBoot</li>
+                            <li>Node.js</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h6>前端</h6>
+                        <ul class="margin-left-2">
+                            <li>Foundation</li>
+                            <li>JQuery</li>
+                            <li>Webpack</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="margin-left-1">
+                <h5>其他</h5>
+                <ul class="margin-left-2">
+                    <li>Git</li>
+                    <li>Github</li>
+                    <li>gitee</li>
+                </ul>
+            </div>
+        </div>
+        <hr class="cell" style="--lasttime: 2s"/>
+
+        <!-- 开源项目 -->
+        <p class="taltitle" style="--lasttime: 2.2s"><b>当前开源项目类型有</b></p>
+        <blockquote class="cell margin-bottom-0 grid-x radius" style="--lasttime: 2.4s">
             <div class="cell shrink show-for-medium-only padding-left-1"></div>
             <div class="cell auto">
                 <b>前端相关</b>
                 <ul class="padding-left-1">
-                    <li><p>webpack 打包工具增强框架：<u><a href="https://gitee.com/PatternDirClean/PDWebpack"
-                                                  target="_blank">PDWebpack</a></u></p></li>
+                    <li><p>webpack 打包工具增强框架：<u><a
+                            href="https://fybug.gitee.io/projectsby/PDWebpack.html"
+                            target="_blank">PDWebpack</a></u></p></li>
                     <li><p>webpack 自动化开发框架：<u><a href="https://gitee.com/fybug/aout.ass"
                                                  target="_blank">aout.ass</a></u></p></li>
                 </ul>
                 <b>java 相关</b>
                 <ul class="padding-left-1">
-                    <li><p>并发锁管理工具：<u><a href="https://gitee.com/PatternDirClean/PDConcurrent"
+                    <li><p>并发锁管理工具：<u><a href="https://fybug.gitee.io/projectsby/PDConcurrent.html"
                                          target="_blank">PDConcurrent</a></u></p></li>
                     <li><p>文件监听工具库：<u><a href="https://gitee.com/PatternDirClean/PDFileWatch"
                                          target="_blank">PDFileWatch</a></u></p></li>
