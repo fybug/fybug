@@ -88,6 +88,8 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
+vhannels.setName(["floatContlos"]);
+
 __webpack_require__(1);
 
 __webpack_require__(2);
@@ -104,47 +106,27 @@ __webpack_require__(3);
 /* 2 */
 /***/ (function(module, exports) {
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _classStaticPrivateFieldSpecGet(receiver, classConstructor, descriptor) { if (receiver !== classConstructor) { throw new TypeError("Private static access of wrong provenance"); } if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
+function _classStaticPrivateFieldSpecGet(receiver, classConstructor, descriptor) { _classCheckPrivateStaticAccess(receiver, classConstructor); _classCheckPrivateStaticFieldDescriptor(descriptor, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
+
+function _classCheckPrivateStaticFieldDescriptor(descriptor, action) { if (descriptor === undefined) { throw new TypeError("attempted to " + action + " private static field before its declaration"); } }
+
+function _classCheckPrivateStaticAccess(receiver, classConstructor) { if (receiver !== classConstructor) { throw new TypeError("Private static access of wrong provenance"); } }
+
+function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
 
 /** 消息对象
  *
  * 用于显示多种状态的消息，每种状态都可以设定对应显示方式
  *
- * @extends vhannels.View
+ * @extends vhannels.ViewGroup
  * @class vhannels.floatContlos.Message
  * @see vhannels.floatContlos.FloatMessage
  * @author fybug
  * @version 0.0.1
  */
-var Message = /*#__PURE__*/function (_vhannels$ViewGroup) {
-  _inherits(Message, _vhannels$ViewGroup);
-
-  var _super = _createSuper(Message);
-
+class Message extends vhannels.ViewGroup {
   /** 默认处理 */
 
   /** 消息样式列表 */
@@ -159,16 +141,10 @@ var Message = /*#__PURE__*/function (_vhannels$ViewGroup) {
    *    destroy:function(vhannels.ViewGroup)
    * }} styrun 每一个状态的显示处理，load/success/error 会额外传入当前请求的消息内容，在有消息的状态没有定义处理的时候会使用默认处理 default
    */
-  function Message() {
-    var _this;
+  constructor(styrun = {}) {
+    super(document.createElement("message"));
 
-    var styrun = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    _classCallCheck(this, Message);
-
-    _this = _super.call(this, document.createElement("message"));
-
-    _defineProperty(_assertThisInitialized(_this), "stylemap", {
+    _defineProperty(this, "stylemap", {
       /** 表示正在加载中的样式
        *
        * @type function(string,vhannels.ViewGroup)
@@ -197,27 +173,20 @@ var Message = /*#__PURE__*/function (_vhannels$ViewGroup) {
        *
        * @type function(vhannels.ViewGroup)
        */
-      destroy: function destroy(v) {
-        return setTimeout(function () {
-          return v.remove();
-        }, 600);
-      }
+      destroy: v => setTimeout(() => v.remove(), 350)
     });
 
-    _this.attrs({
+    this.attrs({
       vhannels: "vhannels.floatContlos.FloatMessage.Message"
     });
 
-    if (styrun["default"]) {
-      var messagelist = ["load", "success", "error", "warning"];
-      messagelist.forEach(function (v) {
-        return _this.stylemap[v] = styrun["default"];
-      });
-      delete styrun["default"];
+    if (styrun.default) {
+      let messagelist = ["load", "success", "error", "warning"];
+      messagelist.forEach(v => this.stylemap[v] = styrun.default);
+      delete styrun.default;
     }
 
-    _this.stylemap = Object.assign(_this.stylemap, styrun);
-    return _this;
+    this.stylemap = Object.assign(this.stylemap, styrun);
   }
   /** 加载中的消息
    *
@@ -225,139 +194,104 @@ var Message = /*#__PURE__*/function (_vhannels$ViewGroup) {
    *
    * @param {string} message 消息内容
    *
-   * @return this
+   * @return {vhannels.floatContlos.Message} this
    */
 
 
-  _createClass(Message, [{
-    key: "message_load",
-    value: function message_load(message) {
-      this.__toclass("primary");
+  message_load(message) {
+    this.__toclass("primary");
 
-      this.stylemap.load(message, this);
-      return this;
-    }
-    /** 成功的消息
-     *
-     * 追加 success 类，并运行 success 显示处理
-     *
-     * @param {string} message 消息内容
-     *
-     * @return this
-     */
+    this.stylemap.load(message, this);
+    return this;
+  }
+  /** 成功的消息
+   *
+   * 追加 success 类，并运行 success 显示处理
+   *
+   * @param {string} message 消息内容
+   *
+   * @return {vhannels.floatContlos.Message} this
+   */
 
-  }, {
-    key: "message_success",
-    value: function message_success(message) {
-      this.__toclass("success");
 
-      this.stylemap.success(message, this);
-      return this;
-    }
-    /** 错误的消息
-     *
-     * 追加 alert 类，并运行 error 显示处理
-     *
-     * @param {string} message 消息内容
-     *
-     * @return this
-     */
+  message_success(message) {
+    this.__toclass("success");
 
-  }, {
-    key: "message_error",
-    value: function message_error(message) {
-      this.__toclass("alert");
+    this.stylemap.success(message, this);
+    return this;
+  }
+  /** 错误的消息
+   *
+   * 追加 alert 类，并运行 error 显示处理
+   *
+   * @param {string} message 消息内容
+   *
+   * @return {vhannels.floatContlos.Message} this
+   */
 
-      this.stylemap.error(message, this);
-      return this;
-    }
-    /** 警告的消息
-     *
-     * 追加 warning 类，并运行 warning 显示处理
-     *
-     * @param {string} message 消息内容
-     *
-     * @return this
-     */
 
-  }, {
-    key: "message_warnning",
-    value: function message_warnning(message) {
-      this.__toclass("warning");
+  message_error(message) {
+    this.__toclass("alert");
 
-      this.stylemap.warning(message, this);
-      return this;
-    }
-    /** 销毁当前消息
-     *
-     * 追加 destroy 类，并运行 destroy 显示处理
-     */
+    this.stylemap.error(message, this);
+    return this;
+  }
+  /** 警告的消息
+   *
+   * 追加 warning 类，并运行 warning 显示处理
+   *
+   * @param {string} message 消息内容
+   *
+   * @return {vhannels.floatContlos.Message} this
+   */
 
-  }, {
-    key: "message_destroy",
-    value: function message_destroy() {
-      this["class"](["destroy"]);
-      this.stylemap.destroy(this);
-    }
-    /**
-     * @param {"destroy"|"primary"|"secondary"|"success"|"alert"|"warning"} classna
-     */
 
-  }, {
-    key: "__toclass",
-    value: function __toclass(classna) {
-      var a = {
-        "primary": false,
-        "secondary": false,
-        "success": false,
-        "alert": false,
-        "warning": false
-      };
-      a[classna] = true;
-      this["class"]({
-        "toggle": a
-      });
-    }
-  }]);
+  message_warnning(message) {
+    this.__toclass("warning");
 
-  return Message;
-}(vhannels.ViewGroup);
-/** @type vhannels.floatContlos.Message */
+    this.stylemap.warning(message, this);
+    return this;
+  }
+  /** 销毁当前消息
+   *
+   * 追加 destroy 类，并运行 destroy 显示处理
+   */
 
+
+  message_destroy() {
+    this.class(["destroy"]);
+    this.stylemap.destroy(this);
+  }
+  /**
+   * @param {"destroy"|"primary"|"secondary"|"success"|"alert"|"warning"} classna
+   */
+
+
+  __toclass(classna) {
+    let a = {
+      "primary": false,
+      "secondary": false,
+      "success": false,
+      "alert": false,
+      "warning": false
+    };
+    a[classna] = true;
+    this.class({
+      "toggle": a
+    });
+  }
+
+}
 
 var _nullfun = {
   writable: true,
-  value: function value(message, v) {
-    return v.querySelector("p").getDom().innerText = message;
-  }
+  value: (message, v) => v.querySelector("p").getDom().innerText = message
 };
-vhannels.setName(["floatContlos"]).Message = Message;
+vhannels.floatContlos.Message = Message;
 
 /***/ }),
 /* 3 */
 /***/ (function(module, exports) {
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 /** 悬浮消息工具
  *
@@ -369,91 +303,66 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
  * @author fybug
  * @version 0.0.1
  */
-var FloatMessage = /*#__PURE__*/function (_vhannels$ViewGroup) {
-  _inherits(FloatMessage, _vhannels$ViewGroup);
-
-  var _super = _createSuper(FloatMessage);
-
+class FloatMessage extends vhannels.ViewGroup {
   /**
    * @param {HTMLElement|vhannels.ViewGroup} dom 容器添加到该节点内
    */
-  function FloatMessage() {
-    var _this;
+  constructor(dom = vhannels.View.Body) {
+    super(document.createElement("messagegroup")); // 插入消息容器
 
-    var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document.body;
+    dom.append(this.getDom()); // 赋予消息组样式
 
-    _classCallCheck(this, FloatMessage);
-
-    _this = _super.call(this, document.createElement("messagegroup")); // 插入消息容器
-
-    dom.append(_this.getDom()); // 赋予消息组样式
-
-    _this.attrs({
+    this.attrs({
       vhannels: "vhannels.floatContlos.FloatMessage"
     });
-
-    return _this;
   }
   /** 展示消息对象
    *
    * @param {vhannels.floatContlos.Message} message 要展示的消息
-   * @param {number} time 消息展示的时长，不传入则为无限
+   * @param {number|undefined} time 消息展示的时长，不传入则为无限
    *
-   * @return vhannels.floatContlos.Message 消息对象
+   * @return {vhannels.floatContlos.Message} 消息对象
    */
 
 
-  _createClass(FloatMessage, [{
-    key: "showMessage",
-    value: function showMessage(message, time) {
-      this.append(message);
-      setTimeout(function () {
-        return message["class"]({
-          toggle: {
-            "show": true,
-            "destroy": false
-          }
-        });
-      }, 10);
-      time !== undefined && setTimeout(function () {
-        return message.message_destroy();
-      }, time + 9);
-      return message;
-    }
-    /** 创建消息对象
-     *
-     * 创建消息对象并赋予状态处理
-     *
-     * @param {{
-     *    default:function(string,vhannels.ViewGroup)|undefined,
-     *    load:function(string,vhannels.ViewGroup)|undefined,
-     *    success:function(string,vhannels.ViewGroup)|undefined,
-     *    error:function(string,vhannels.ViewGroup)|undefined,
-     *    warning:function(string,vhannels.ViewGroup)|undefined,
-     *    destroy:function(vhannels.ViewGroup)
-     * }} styrun 每一个状态的显示处理，load/success/error 会额外传入当前请求的消息内容，在有消息的状态没有定义处理的时候会使用默认处理 default
-     * @param {function(vhannels.ViewGroup)} bestyle 前置渲染，初始化视图的内容，传入消息视图对象
-     *
-     * @return vhannels.floatContlos.Message 消息对象
-     */
+  showMessage(message, time = undefined) {
+    this.append(message);
+    setTimeout(() => message.class({
+      toggle: {
+        "show": true,
+        "destroy": false
+      }
+    }), 10);
+    time !== undefined && setTimeout(() => message.message_destroy(), time + 9);
+    return message;
+  }
+  /** 创建消息对象
+   *
+   * 创建消息对象并赋予状态处理
+   *
+   * @param {{
+   *    default:function(string,vhannels.ViewGroup)|undefined,
+   *    load:function(string,vhannels.ViewGroup)|undefined,
+   *    success:function(string,vhannels.ViewGroup)|undefined,
+   *    error:function(string,vhannels.ViewGroup)|undefined,
+   *    warning:function(string,vhannels.ViewGroup)|undefined,
+   *    destroy:function(vhannels.ViewGroup)
+   * }} styrun 每一个状态的显示处理，load/success/error 会额外传入当前请求的消息内容，在有消息的状态没有定义处理的时候会使用默认处理 default
+   * @param {function(vhannels.ViewGroup)} bestyle 前置渲染，初始化视图的内容，传入消息视图对象
+   *
+   * @return {vhannels.floatContlos.Message} 消息对象
+   */
 
-  }, {
-    key: "createMessage",
-    value: function createMessage() {
-      var styrun = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var bestyle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function (v) {
-        return v.append(new vhannels.View(document.createElement("p")));
-      };
-      var v = new vhannels.floatContlos.Message(styrun);
-      bestyle(v);
-      return v;
-    }
-  }]);
 
-  return FloatMessage;
-}(vhannels.ViewGroup);
+  createMessage(styrun = {}, bestyle = v => v.append(document.createElement("p"))) {
+    let v = new vhannels.floatContlos.Message(styrun);
+    bestyle(v);
+    return v;
+  }
 
-vhannels.setName(["floatContlos"]).FloatMessage = FloatMessage;
+}
+
+vhannels.floatContlos.FloatMessage = FloatMessage;
 
 /***/ })
 /******/ ]);

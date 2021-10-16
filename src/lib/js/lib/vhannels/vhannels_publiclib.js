@@ -81,22 +81,211 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */,
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */
+/******/ ({
+
+/***/ 10:
+/***/ (function(module, exports) {
+
+/** vhannels 视图容器对象
+ *
+ * 存放一个原始节点，并支持子对象操作
+ *
+ * @author fybug
+ * @version 0.0.1
+ * @extends vhannels.View
+ * @class vhannels.ViewGroup
+ */
+class ViewGroup extends vhannels.View {
+  /** @param {HTMLElement|vhannels.View} dom 当前节点 */
+  constructor(dom = document.body) {
+    super(dom);
+  }
+  /*--------------------------------------------------------------------------------------------*/
+
+  /** 获取子节点集合
+   *
+   * 与 {@link views} 的区别为直接返回原始数据
+   *
+   * @return {Element[]} 节点集合
+   */
+
+
+  doms() {
+    let re = [];
+    let node = this.getDom().firstElementChild;
+    /* 转化 */
+
+    while (node) {
+      re.push(node);
+      node = node.nextElementSibling;
+    }
+
+    return re;
+  }
+  /** 获取子视图集合
+   *
+   * 于 {@link doms} 的区别为返回包装后的数据
+   *
+   * @return {vhannels.ViewGroup[]} 视图集合
+   */
+
+
+  views() {
+    let views = [];
+
+    for (let v of this.doms()) views.push(new vhannels.ViewGroup(v));
+
+    return views;
+  }
+  /** 查找子视图
+   *
+   * @param {string} select 查找规则
+   * @return {vhannels.ViewGroup[]}
+   */
+
+
+  querySelectorAll(select) {
+    let d = this.getDom(); // 查询的数据
+
+    let nods = d.querySelectorAll(select);
+    /* 转化 */
+
+    let re = [];
+    nods.forEach(v => re.push(new vhannels.ViewGroup(v)));
+    return re;
+  }
+  /** 查找子视图
+   *
+   * @param {string} select 查找规则
+   * @return {vhannels.ViewGroup}
+   */
+
+
+  querySelector(select) {
+    let d = this.getDom(); // 查询的数据
+
+    let node = d.querySelector(select);
+    return new vhannels.ViewGroup(node);
+  }
+  /*--------------------------------------------------------------------------------------------*/
+
+  /** 在容器前面插入视图
+   *
+   * @param {vhannels.View|HTMLElement} view
+   * @return {vhannels.ViewGroup} this
+   */
+
+
+  prepend(...view) {
+    let d = this.getDom();
+
+    for (let v of view) d.insertBefore(ViewGroup.__toDom(v), d.firstChild);
+
+    return this;
+  }
+  /*-------------------------*/
+
+  /** 在容器后面追加视图
+   *
+   * @param {vhannels.View|HTMLElement} view
+   * @return {vhannels.ViewGroup} this
+   */
+
+
+  append(...view) {
+    let d = this.getDom();
+
+    for (let v of view) d.appendChild(ViewGroup.__toDom(v));
+
+    return this;
+  }
+  /** 追加 html 内容
+   *
+   * @param {string} html 追加的 html 内容
+   * @return {vhannels.ViewGroup} this
+   */
+
+
+  addHtml(html) {
+    this.getDom().innerHTML += html;
+    return this;
+  }
+  /*--------------------------------------------------------------------------------------------*/
+
+  /** 删除容器内指定的视图
+   *
+   * @param {vhannels.View|HTMLElement} view 要删除的视图
+   * @return {vhannels.ViewGroup} this
+   */
+
+
+  delete(...view) {
+    let d = this.getDom();
+
+    for (let v of view) d.removeChild(ViewGroup.__toDom(v));
+
+    return this;
+  }
+  /** 替换指定视图
+   *
+   * 通过替换映射进行，of 表示要替换的视图，to 标识替换成的视图
+   *
+   * @param {{
+   *     of:HTMLElement|vhannels.View,
+   *     to:HTMLElement|vhannels.View
+   * }} viewto 替换列表
+   * @return {vhannels.ViewGroup} this
+   */
+
+
+  replace(...viewto) {
+    let d = this.getDom();
+
+    for (let vt of viewto) d.replaceChild(ViewGroup.__toDom(vt.to), ViewGroup.__toDom(vt.of));
+
+    return this;
+  }
+  /** 清空内容
+   *
+   * 可通过查询表达式删除指定的所有内容
+   *
+   * @param {string|undefined} query 查询表达式
+   * @return {vhannels.ViewGroup} this
+   */
+
+
+  clean(query = undefined) {
+    if (query === undefined) this.getDom().innerHTML = '';else this.querySelectorAll(query).forEach(v => v.remove());
+    return this;
+  }
+  /*--------------------------------------------------------------------------------------------*/
+
+
+  static creaViewGroup(dom) {
+    if (typeof dom === 'string') return new ViewGroup(document.createElement(dom));else return new ViewGroup(dom);
+  }
+  /** 确保对象为 ViewGroup 对象
+   *
+   * @return vhannels.ViewGroup
+   */
+
+
+  static __toViewGroup(dom) {
+    if (dom instanceof vhannels.ViewGroup) return dom;
+    return this.creaViewGroup(dom);
+  }
+
+}
+
+vhannels.ViewGroup = ViewGroup;
+
+/***/ }),
+
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 window.vhannels || (window.vhannels = {});
 /** 检查命名空间
@@ -104,63 +293,47 @@ window.vhannels || (window.vhannels = {});
  * @param {[string]} names 命名空间
  */
 
-vhannels.setName = function (names) {
-  var last = window.vhannels;
+vhannels.setName = names => {
+  let last = window.vhannels;
 
-  var _iterator = _createForOfIteratorHelper(names),
-      _step;
+  for (let name of names) {
+    if (name === undefined) continue; // 命名空间未就绪
 
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var name = _step.value;
-      if (name === undefined) continue; // 命名空间未就绪
+    if (last[name] === undefined) last[name] = {}; // 记录当前命名空间
 
-      if (last[name] === undefined) last[name] = {}; // 记录当前命名空间
-
-      last = last[name];
-    }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
+    last = last[name];
   }
 
   return last;
 };
 
-__webpack_require__(5);
+__webpack_require__(9);
 
-__webpack_require__(6);
+__webpack_require__(10); // 全局 Body 对象
+
+
+window.addEventListener("load", () => vhannels.View.Body = new vhannels.ViewGroup(document.body));
 
 /***/ }),
-/* 5 */
+
+/***/ 9:
 /***/ (function(module, exports) {
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
 
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "set"); _classApplyDescriptorSet(receiver, descriptor, value); return value; }
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
 
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _classPrivateFieldGet(receiver, privateMap) { var descriptor = privateMap.get(receiver); if (!descriptor) { throw new TypeError("attempted to get private field on non-instance"); } if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
-
-function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = privateMap.get(receiver); if (!descriptor) { throw new TypeError("attempted to set private field on non-instance"); } if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } return value; }
-
-var _dom = new WeakMap();
+var _dom = /*#__PURE__*/new WeakMap();
 
 /** vhannels 视图对象
  *
@@ -170,17 +343,15 @@ var _dom = new WeakMap();
  * @version 0.0.1
  * @class vhannels.View
  */
-var View = /*#__PURE__*/function () {
+class View {
   /** 当前节点
    *
    *  @type HTMLElement
    */
 
   /** @param {HTMLElement|vhannels.View} dom 当前节点 */
-  function View(dom) {
-    _classCallCheck(this, View);
-
-    _dom.set(this, {
+  constructor(dom) {
+    _classPrivateFieldInitSpec(this, _dom, {
       writable: true,
       value: void 0
     });
@@ -195,464 +366,241 @@ var View = /*#__PURE__*/function () {
    */
 
 
-  _createClass(View, [{
-    key: "getDom",
-    value: function getDom() {
-      return _classPrivateFieldGet(this, _dom);
-    }
-    /** 查找子视图
-     *
-     * @param {string} select 查找规则
-     * @return vhannels.ViewGroup[]
-     */
-
-  }, {
-    key: "querySelectorAll",
-    value: function querySelectorAll(select) {
-      var d = this.getDom(); // 查询的数据
-
-      var nods = d.querySelectorAll(select);
-      /* 转化 */
-
-      var re = [];
-      nods.forEach(function (v) {
-        return re.push(new vhannels.ViewGroup(v));
-      });
-      return re;
-    }
-    /** 查找子视图
-     *
-     * @param {string} select 查找规则
-     * @return vhannels.ViewGroup
-     */
-
-  }, {
-    key: "querySelector",
-    value: function querySelector(select) {
-      var d = this.getDom(); // 查询的数据
-
-      var node = d.querySelector(select);
-      return new vhannels.ViewGroup(node);
-    }
-    /*--------------------------------------------------------------------------------------------*/
-
-    /** 属性修改
-     *
-     * @param {Object} data { 属性名：属性值 }，属性值为 undefined 则是消除属性
-     * @return this
-     */
-
-  }, {
-    key: "attrs",
-    value: function attrs(data) {
-      var d = this.getDom();
-      var v;
-
-      for (var key in data) {
-        if (key === undefined) continue;
-        v = data[key]; // 检查是否删除
-
-        v !== undefined ? d.setAttribute(key, v) : d.removeAttribute(key);
-      }
-
-      return this;
-    }
-    /** 类操作
-     *
-     * 提供一体化类操作的接口
-     *
-     * - 追加类<br/>
-     * class("a","s");
-     *
-     * - 移除类<br/>
-     * class({"remove":["a","s"]});
-     *
-     * - 检查是否有对应的类<br/>
-     * class({"check":["a","s"]});
-     *
-     * - 切换类操作<br/>
-     * class({"toggle":["a","s"]});
-     *
-     * 在检查或者切换类的操作后会返回对应的结果，其他操作则是空对象
-     *
-     * @param {{
-     *     check:undefined|[string],
-     *     remove:undefined|[string],
-     *     toggle:undefined|{
-     *         classname:undefined|boolean
-     *     }|[string]
-     * }|[string]} clas
-     * @return {{
-     *     classname:boolean
-     * }}
-     */
-
-  }, {
-    key: "class",
-    value: function _class(clas) {
-      var d = this.getDom();
-      var a = d.classList;
-      var re = {}; // 追加
-
-      if (Array.isArray(clas)) a.add.apply(a, _toConsumableArray(clas));else {
-        // 检查
-        if (clas.check) {
-          var _iterator = _createForOfIteratorHelper(clas.check),
-              _step;
-
-          try {
-            for (_iterator.s(); !(_step = _iterator.n()).done;) {
-              var v = _step.value;
-              re[v] = a.contains(v);
-            }
-          } catch (err) {
-            _iterator.e(err);
-          } finally {
-            _iterator.f();
-          }
-        } // 移除
-
-
-        clas.remove && a.remove.apply(a, _toConsumableArray(clas)); // 切换
-
-        if (clas.toggle) if (Array.isArray(clas.toggle)) {
-          var _iterator2 = _createForOfIteratorHelper(clas.toggle),
-              _step2;
-
-          try {
-            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-              var cla = _step2.value;
-              re[cla] = a.toggle(cla);
-            }
-          } catch (err) {
-            _iterator2.e(err);
-          } finally {
-            _iterator2.f();
-          }
-        } else {
-          for (var _cla in clas.toggle) {
-            re[_cla] = a.toggle(_cla, clas.toggle[_cla]);
-          }
-        }
-      }
-      return re;
-    }
-    /** css 样式操作
-     *
-     * 操作一体化样式操作
-     *
-     * 传入的对象示意需要进行的操作，
-     * 含有 "remove" 字段将会对声明的样式进行移除，
-     * 含有 "get" 字段将会获取声明的样式的值以及是否 !important，
-     * 在对象中直接声明要修改的样式，可以和上面的两个字段混合使用
-     *
-     * - 移除样式<br/>
-     * style({"remove":["color"]});
-     *
-     * - 获取样式内容<br/>
-     * style({"get":["color"]});
-     *
-     * - 设置样式<br/>
-     * style({"color":"red"});
-     *
-     * @param {{
-     *     cssname:string|[string],
-     *     "remove":[string],
-     *     "get":[string]
-     * }} sty
-     *
-     * @return {{
-     *     cssname:{
-     *         "val":string,
-     *         "important":"important"|""
-     *     }
-     * }}
-     */
-
-  }, {
-    key: "style",
-    value: function style(sty) {
-      var d = this.getDom();
-      var s = d.style;
-      var re = {};
-
-      for (var v in sty) {
-        if (v === "remove") {
-          // 移除
-          var _iterator3 = _createForOfIteratorHelper(v),
-              _step3;
-
-          try {
-            for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-              var res = _step3.value;
-              s.removeProperty(res);
-              re[res] && (re[res] = undefined);
-            }
-          } catch (err) {
-            _iterator3.e(err);
-          } finally {
-            _iterator3.f();
-          }
-        } else if (v === "get") {
-          var _iterator4 = _createForOfIteratorHelper(v),
-              _step4;
-
-          try {
-            for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-              var _res = _step4.value;
-              re[_res] = {
-                "val": s.getPropertyValue(_res),
-                "important": s.getPropertyPriority(_res)
-              };
-            }
-          } catch (err) {
-            _iterator4.e(err);
-          } finally {
-            _iterator4.f();
-          }
-        } else {
-          // 设置 important
-          if (Array.isArray(sty[v])) s.setProperty(v, sty[v][0], sty[v][1]);else s.setProperty(v, sty[v]);
-        }
-      }
-
-      return re;
-    }
-    /*--------------------------------------------------------------------------------------------*/
-
-    /** 移除此视图 */
-
-  }, {
-    key: "remove",
-    value: function remove() {
-      var d = this.getDom();
-      d.parentNode.removeChild(d);
-    }
-    /** 确保为原始元素节点
-     *
-     * @param {HTMLElement|View} view 要确保的对象
-     * @return {HTMLElement} 元素节点
-     */
-
-  }], [{
-    key: "__toDom",
-    value: function __toDom(view) {
-      if (view instanceof vhannels.View) return view.getDom();
-      return view;
-    }
-  }]);
-
-  return View;
-}();
-/** @type View */
-
-
-vhannels.View = View;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-/** vhannels 视图容器对象
- *
- * 存放一个原始节点，并支持子对象操作
- *
- * @author fybug
- * @version 0.0.1
- * @extends vhannels.View
- * @class vhannels.ViewGroup
- */
-var ViewGroup = /*#__PURE__*/function (_vhannels$View) {
-  _inherits(ViewGroup, _vhannels$View);
-
-  var _super = _createSuper(ViewGroup);
-
-  /** @param {HTMLElement|vhannels.View} dom 当前节点 */
-  function ViewGroup() {
-    var dom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document.body;
-
-    _classCallCheck(this, ViewGroup);
-
-    return _super.call(this, dom);
+  getDom() {
+    return _classPrivateFieldGet(this, _dom);
   }
-  /*--------------------------------------------------------------------------------------------*/
-
-  /** 获取子节点集合
+  /** 刷新 html 内容
    *
-   * 与 {@link views} 的区别为直接返回原始数据
-   *
-   * @return HTMLCollection 节点集合
+   * @param {string} html 新的 html 内容
+   * @return {vhannels.View} this
    */
 
 
-  _createClass(ViewGroup, [{
-    key: "doms",
-    value: function doms() {
-      return this.getDom().children;
+  setHtml(html) {
+    this.getDom().innerHTML = html;
+    return this;
+  }
+  /** 获取 html 内容
+   *
+   * @return {string}
+   */
+
+
+  html() {
+    return this.getDom().innerHTML;
+  }
+  /** 获取 innerText 的内容
+   *
+   * @return {string}
+   */
+
+
+  text() {
+    return this.getDom().innerText;
+  }
+  /** 设置 innerText 的内容
+   *
+   * @param {string} t 文本内容
+   *
+   * @return {vhannels.View} this
+   */
+
+
+  settext(t) {
+    this.getDom().innerText = t;
+    return this;
+  }
+  /*--------------------------------------------------------------------------------------------*/
+
+  /** 属性修改
+   *
+   * @param {Object} data { 属性名：属性值 }，属性值为 undefined 则是消除属性
+   * @return {vhannels.View} this
+   */
+
+
+  attrs(data) {
+    let d = this.getDom();
+    let v;
+
+    for (let key in data) {
+      if (key === undefined) continue;
+      v = data[key]; // 检查是否删除
+
+      v !== undefined ? d.setAttribute(key, v) : d.removeAttribute(key);
     }
-    /** 获取子视图集合
-     *
-     * 于 {@link doms} 的区别为返回包装后的数据
-     *
-     * @return vhannels.View[] 视图集合
-     */
 
-  }, {
-    key: "views",
-    value: function views() {
-      var views = [];
+    return this;
+  }
+  /** 获取属性
+   *
+   * @param {[string]} data 要获取的属性列表
+   * @return {{"string":string}} 获取的属性映射
+   */
 
-      var _iterator = _createForOfIteratorHelper(this.doms()),
-          _step;
 
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var v = _step.value;
-          views.push(new vhannels.View(v));
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
+  getattrs(data) {
+    let d = this.getDom();
+    let ats = {};
+
+    for (let v of data) ats[v] = d.getAttribute(v);
+
+    return ats;
+  }
+  /** 获取 value 的内容
+   *
+   * @return {string} 获取的属性值
+   */
+
+
+  value() {
+    return this.getDom().value;
+  }
+  /** 设置 value 的内容
+   *
+   * @param {string} v 要设置的值
+   *
+   * @return {vhannels.View} this
+   */
+
+
+  setvalue(v) {
+    this.getDom().value = v;
+    return this;
+  }
+  /*------------------------*/
+
+  /** 类操作
+   *
+   * 提供一体化类操作的接口
+   *
+   * - 追加类<br/>
+   * class("a","s");
+   *
+   * - 移除类<br/>
+   * class({"remove":["a","s"]});
+   *
+   * - 检查是否有对应的类<br/>
+   * class({"check":["a","s"]});
+   *
+   * - 切换类操作<br/>
+   * class({"toggle":["a","s"]});
+   *
+   * 在检查或者切换类的操作后会返回对应的结果，其他操作则是空对象
+   *
+   * @param {{
+   *     check:undefined|[string],
+   *     remove:undefined|[string],
+   *     toggle:undefined|{
+   *         classname:undefined|boolean
+   *     }|[string]
+   * }|[string]} clas
+   * @return {{
+   *     classname:boolean
+   * }}
+   */
+
+
+  class(clas) {
+    let d = this.getDom();
+    let a = d.classList;
+    let re = {}; // 追加
+
+    if (Array.isArray(clas)) a.add(...clas);else {
+      // 检查
+      if (clas.check) for (let v of clas.check) re[v] = a.contains(v); // 移除
+
+      clas.remove && a.remove(...clas.remove); // 切换
+
+      if (clas.toggle) if (Array.isArray(clas.toggle)) {
+        for (let cla of clas.toggle) re[cla] = a.toggle(cla);
+      } else {
+        for (let cla in clas.toggle) re[cla] = a.toggle(cla, clas.toggle[cla]);
       }
-
-      return views;
     }
-    /*--------------------------------------------------------------------------------------------*/
+    return re;
+  }
+  /** css 样式操作
+   *
+   * 操作一体化样式操作
+   *
+   * 传入的对象示意需要进行的操作，
+   * 含有 "remove" 字段将会对声明的样式进行移除，
+   * 含有 "get" 字段将会获取声明的样式的值以及是否 !important，
+   * 在对象中直接声明要修改的样式，可以和上面的两个字段混合使用
+   *
+   * - 移除样式<br/>
+   * style({"remove":["color"]});
+   *
+   * - 获取样式内容<br/>
+   * style({"get":["color"]});
+   *
+   * - 设置样式<br/>
+   * style({"color":"red"});
+   *
+   * @param {{
+   *     cssname:string|[string],
+   *     "remove":[string],
+   *     "get":[string]
+   * }} sty
+   *
+   * @return {{
+   *     cssname:{
+   *         "val":string,
+   *         "important":"important"|""
+   *     }
+   * }}
+   */
 
-    /** 在容器前面插入视图
-     *
-     * @param {vhannels.View|HTMLElement} view
-     * @return this
-     */
 
-  }, {
-    key: "prepend",
-    value: function prepend() {
-      var d = this.getDom();
+  style(sty) {
+    let d = this.getDom();
+    let s = d.style;
+    let re = {};
 
-      for (var _len = arguments.length, view = new Array(_len), _key = 0; _key < _len; _key++) {
-        view[_key] = arguments[_key];
-      }
-
-      for (var _i = 0, _view = view; _i < _view.length; _i++) {
-        var v = _view[_i];
-        d.insertBefore(ViewGroup.__toDom(v), d.firstChild);
-      }
-
-      return this;
+    for (let v in sty) if (v === "remove") // 移除
+      for (let res of v) {
+        s.removeProperty(res);
+        re[res] && (re[res] = undefined);
+      } else if (v === "get") for (let res of v) re[res] = {
+      "val": s.getPropertyValue(res),
+      "important": s.getPropertyPriority(res)
+    };else {
+      // 设置 important
+      if (Array.isArray(sty[v])) s.setProperty(v, sty[v][0], sty[v][1]);else s.setProperty(v, sty[v]);
     }
-    /*-------------------------*/
 
-    /** 在容器后面追加视图
-     *
-     * @param {vhannels.View|HTMLElement} view
-     * @return this
-     */
+    return re;
+  }
+  /*--------------------------------------------------------------------------------------------*/
 
-  }, {
-    key: "append",
-    value: function append() {
-      var d = this.getDom();
-
-      for (var _len2 = arguments.length, view = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        view[_key2] = arguments[_key2];
-      }
-
-      for (var _i2 = 0, _view2 = view; _i2 < _view2.length; _i2++) {
-        var v = _view2[_i2];
-        d.appendChild(ViewGroup.__toDom(v));
-      }
-
-      return this;
-    }
-    /*--------------------------------------------------------------------------------------------*/
-
-    /** 删除指定的视图
-     *
-     * @param {vhannels.View|HTMLElement} view 要删除的视图
-     * @return this
-     */
-
-  }, {
-    key: "delete",
-    value: function _delete() {
-      var d = this.getDom();
-
-      for (var _len3 = arguments.length, view = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        view[_key3] = arguments[_key3];
-      }
-
-      for (var _i3 = 0, _view3 = view; _i3 < _view3.length; _i3++) {
-        var v = _view3[_i3];
-        d.removeChild(ViewGroup.__toDom(v));
-      }
-
-      return this;
-    }
-    /** 替换指定视图
-     *
-     * 通过替换映射进行，of 表示要替换的视图，to 标识替换成的视图
-     *
-     * @param {{
-     *     of:HTMLElement|vhannels.View,
-     *     to:HTMLElement|vhannels.View
-     * }} viewto 替换列表
-     * @return this
-     */
-
-  }, {
-    key: "replace",
-    value: function replace() {
-      var d = this.getDom();
-
-      for (var _len4 = arguments.length, viewto = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-        viewto[_key4] = arguments[_key4];
-      }
-
-      for (var _i4 = 0, _viewto = viewto; _i4 < _viewto.length; _i4++) {
-        var vt = _viewto[_i4];
-        d.replaceChild(ViewGroup.__toDom(vt.to), ViewGroup.__toDom(vt.of));
-      }
-
-      return this;
-    }
-  }]);
-
-  return ViewGroup;
-}(vhannels.View);
-/** @type ViewGroup */
+  /** 移除此视图 */
 
 
-vhannels.ViewGroup = ViewGroup;
+  remove() {
+    let d = this.getDom();
+    d.parentNode.removeChild(d);
+  }
+  /** 确保为原始元素节点
+   *
+   * @param {HTMLElement|vhannels.View} view 要确保的对象
+   * @return {HTMLElement} 元素节点
+   */
+
+
+  static __toDom(view) {
+    if (view instanceof vhannels.View) return view.getDom();
+    return view;
+  }
+
+  static creaView(dom) {
+    if (typeof dom === 'string') return new View(document.createElement(dom));else return new View(dom);
+  }
+
+}
+
+vhannels.View = View;
 
 /***/ })
-/******/ ]);
+
+/******/ });
